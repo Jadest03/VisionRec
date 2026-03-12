@@ -14,12 +14,17 @@ def get_frames(video):
 
 if __name__ == '__main__':
     video = cv.VideoCapture(0)
+    if not video.isOpened():
+        print("카메라를 열지 못했습니다. 연결을 확인해주세요.")
+        exit()
+    
+    # get frames
     width, height, fps = get_frames(video)
     
     # path
-    os.makedirs('video', exist_ok=True)
+    os.makedirs('videos', exist_ok=True)
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-    video_path = f"video/recorded_video_{current_time}.avi"
+    video_path = f"videos/recorded_video_{current_time}.avi"
     
     # codec
     codec = cv.VideoWriter_fourcc(*'XVID')
@@ -27,10 +32,6 @@ if __name__ == '__main__':
 
     is_recording = False
 
-    if not video.isOpened():
-        print("카메라를 열지 못했습니다. 연결을 확인해주세요.")
-        exit()
-        
     while True:
         is_read, img = video.read()  
         if not is_read:
@@ -40,9 +41,23 @@ if __name__ == '__main__':
         # prevent red circle in recorded video
         display_img = img.copy()
         
+        # UI
+        cv.rectangle(display_img, (10, 10), (width - 10, height - 10), (255, 255, 255), 2)
+        cv.putText(display_img, "VISION REC", (20, 40), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), thickness=4)
+        cv.putText(display_img, "VISION REC", (20, 40), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), thickness=2)
+        current_display_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cv.putText(display_img, current_display_time, (20, height - 20), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        
+        # Recording
         if is_recording:
             writer.write(img)
             cv.circle(display_img, (width - 30, 30), 10, (0, 0, 255), -1)
+            cv.putText(display_img, "REC", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), thickness=4)
+            cv.putText(display_img, "REC", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), thickness=2)
+        # Not Recording
+        else:
+            cv.putText(display_img, "STBY", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), thickness=4)
+            cv.putText(display_img, "STBY", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), thickness=2)
         cv.imshow('VisionRec', display_img)
         
         # Input Keys
