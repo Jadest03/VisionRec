@@ -1,2 +1,4 @@
 /videos
 venv/
+/captures
+.DS_Store
