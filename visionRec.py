@@ -1,6 +1,7 @@
 import cv2 as cv
 import os
 from datetime import datetime
+#
 
 # functions
 def get_frames(video):
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     
     # path
     os.makedirs('videos', exist_ok=True)
+    os.makedirs('captures', exist_ok=True)
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     video_path = f"videos/recorded_video_{current_time}.avi"
     
@@ -61,7 +63,9 @@ if __name__ == '__main__':
         cv.imshow('VisionRec', display_img)
         
         # Input Keys
-        key = cv.waitKey(1)
+        key_raw = cv.waitKey(1)
+        key = key_raw & 0xFF # erase remaining last 8bits
+        
         if key == 27: # ESC
             print("VisionRec을 종료합니다.")
             break
@@ -72,6 +76,11 @@ if __name__ == '__main__':
             else:
                 is_recording = True
                 print("녹화가 시작되었습니다.")
+        elif key == 67 or key == 99:
+            cap_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+            cap_path = f"captures/capture_{cap_time}.jpg"
+            cv.imwrite(cap_path, img) 
+            print("캡쳐가 완료되었습니다.")
 
     video.release()
     writer.release()
