@@ -55,3 +55,4 @@ It is recommended to use a python virtual environment 'venv'
     ```
 
 ## Demo
+![VisionRec Test Video](/recorded_video_20260315_143301.avi)
