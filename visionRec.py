@@ -7,9 +7,7 @@ import time
 def get_frames(video):
     w = round(video.get(cv.CAP_PROP_FRAME_WIDTH))
     h = round(video.get(cv.CAP_PROP_FRAME_HEIGHT))
-    fps = video.get(cv.CAP_PROP_FPS)
-    if fps == 0.0:
-        fps = 30.0
+    fps = 30.0
     return (w, h, fps)
 
 if __name__ == '__main__':
@@ -24,12 +22,12 @@ if __name__ == '__main__':
     os.makedirs('videos', exist_ok=True)
     os.makedirs('captures', exist_ok=True)
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-    video_path = f"videos/recorded_video_{current_time}.avi"
+    video_path = f"videos/recorded_video_{current_time}.mp4"
     
     # codec
-    codec = cv.VideoWriter_fourcc(*'XVID')
+    codec = cv.VideoWriter_fourcc(*'mp4v') 
     writer = cv.VideoWriter(video_path, codec, fps, (width, height))
-
+    
     is_recording = False
     capture_msg_end_time = 0
     active_filters = []
@@ -79,10 +77,10 @@ if __name__ == '__main__':
             
         # Recording UI
         if is_recording:
-            writer.write(img)
             cv.circle(display_img, (width - 30, 30), 10, (0, 0, 255), -1)
             cv.putText(display_img, "REC", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), thickness=4)
             cv.putText(display_img, "REC", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), thickness=2)
+            writer.write(display_img)
         else:
             cv.putText(display_img, "STBY", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), thickness=4)
             cv.putText(display_img, "STBY", (width - 80, 35), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), thickness=2)
