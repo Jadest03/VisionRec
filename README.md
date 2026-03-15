@@ -55,4 +55,4 @@ It is recommended to use a python virtual environment 'venv'
     ```
 
 ## Demo
-![VisionRec Test Video](/recorded_video_20260315_150708.mp4)
+<video src="./recorded_video_20260315_150708.mp4" controls="controls" width="100%"></video>
